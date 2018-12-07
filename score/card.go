@@ -11,7 +11,7 @@ type scoreCard struct {
 func (sc scoreCard) score(sym Symbol, occ int) int64 {
 	score, ok := sc.symbolScores[sym]
 	if !ok || len(score) < occ {
-		return -1
+		return 0
 	}
-	return int64(score[occ])
+	return int64(score[occ-1])
 }

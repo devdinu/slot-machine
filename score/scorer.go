@@ -3,6 +3,7 @@ package score
 import (
 	"context"
 	"errors"
+	"fmt"
 )
 
 type Line []location
@@ -35,20 +36,21 @@ func (b Board) empty() bool {
 	return len(b) == 0 || len(b[0]) == 0
 }
 
-func (s *Scorer) Compute(ctx context.Context, board Board) (Score, error) {
+func (s Scorer) Compute(ctx context.Context, board Board) (Score, error) {
 	var score Score
 	for _, pl := range s.paylines {
 		occ, err := s.findOccurrences(pl, board)
 		if err != nil {
+			fmt.Println("received an error: ", err)
 			return Score{}, err
 		}
 		score.won += s.card.score(occ.sym, occ.count)
-		//fmt.Println("score-----", score.won, occ.sym, occ.count)
+		fmt.Println("score by occ -----", score.won, occ.sym, occ.count, &score)
 	}
 	return score, nil
 }
 
-func (s *Scorer) findOccurrences(line Line, board Board) (occurence, error) {
+func (s Scorer) findOccurrences(line Line, board Board) (occurence, error) {
 	if board.empty() || len(line) == 0 {
 		return occurence{}, errors.New("Invalid Board")
 	}
