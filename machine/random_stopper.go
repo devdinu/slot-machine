@@ -7,10 +7,6 @@ import (
 
 type Position int
 
-type Line struct {
-	positions []Position
-}
-
 type RandomStopper struct {
 	limit int
 }

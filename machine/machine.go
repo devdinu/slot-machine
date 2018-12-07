@@ -8,10 +8,6 @@ type Machine struct {
 	Reels
 }
 
-func (m Machine) Play() (Score, error) {
-	return Score{}, nil
-}
-
 func (m Machine) Spin() ([]Stop, error) {
 	return m.Reels.Spin()
 }
