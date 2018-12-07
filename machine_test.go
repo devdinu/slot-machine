@@ -16,8 +16,9 @@ func TestShouldReturnStoppedSymbolInReel(t *testing.T) {
 		1,
 		1,
 	)
-	stopper.On("Stop").Return(Position(1))
-	expectedStop := Stop{chosen: []Symbol{"butter"}}
+	stopPosition := Position(1)
+	stopper.On("Stop").Return(stopPosition)
+	expectedStop := Stop{chosen: []Symbol{"butter"}, position: stopPosition}
 
 	stops, err := machine.Spin()
 
@@ -38,8 +39,8 @@ func TestShouldReturnStoppedSymbolsForReels(t *testing.T) {
 	)
 	stopper.On("Stop").Return(Position(0)).Once()
 	stopper.On("Stop").Return(Position(2)).Once()
-	expectedStop1 := Stop{chosen: []Symbol{"cheese", "butter"}}
-	expectedStop2 := Stop{chosen: []Symbol{"eggs", "something"}}
+	expectedStop1 := Stop{chosen: []Symbol{"cheese", "butter"}, position: 0}
+	expectedStop2 := Stop{chosen: []Symbol{"eggs", "something"}, position: 2}
 
 	stops, err := machine.Spin()
 

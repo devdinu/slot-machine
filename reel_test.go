@@ -36,4 +36,5 @@ func TestShouldReturnSymbolsForGivenPositionInCycle(t *testing.T) {
 
 	require.Equal(t, 3, len(stop.chosen))
 	assert.Equal(t, []Symbol{"sym3", "sym4", "sym1"}, stop.chosen)
+	assert.Equal(t, Position(2), stop.position)
 }

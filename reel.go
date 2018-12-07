@@ -15,7 +15,10 @@ type Stop struct {
 
 func (r Reel) Spin() Stop {
 	pos := r.stopper.Stop()
-	return Stop{chosen: r.getSymbols(pos, r.choices)}
+	return Stop{
+		chosen:   r.getSymbols(pos, r.choices),
+		position: pos,
+	}
 }
 
 func (r Reel) getSymbols(position Position, choices int) []Symbol {
