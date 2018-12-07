@@ -1,0 +1,26 @@
+name: Atkins Slot Machine
+score:
+  symbol_score:
+    Atkins:       [0, 5, 50, 500, 5000]
+    Steak:        [0, 3, 40, 200, 1000]
+    Ham:          [0, 2, 30, 150, 500]
+    BuffaloWings: [0, 2, 25, 100, 300]
+    Sausage:      [0, 0, 20, 75, 200]
+    Eggs:         [0, 0, 20, 75, 200]
+    Butter:       [0, 0, 15, 50, 100]
+    Cheese:       [0, 0, 15, 50, 100]
+    Bacon:        [0, 0, 10, 25, 50]
+    Mayonnaise:   [0, 0, 10, 25, 50]
+  pay_lines:
+    - [{row: 0, col: 0}, {row: 1, col: 1}, {row: 1, col: 2}, {row: 2, col: 3}]
+    - [{row: 1, col: 0}, {row: 0, col: 1}, {row: 0, col: 2}, {row: 1, col: 3}]
+    - [{row: 2, col: 0}, {row: 2, col: 1}, {row: 2, col: 2}, {row: 0, col: 3}]
+game:
+  rows: 3
+  reels:
+    - ["Scale","Mayonnaise","Ham","Sausage","Bacon","Eggs","Cheese","Mayonnaise","Sausage","Butter","Buffalo Wings","Bacon","Eggs","Mayonnaise","Steak","Buffalo Wings","Butter","Cheese","Eggs","Atkins","Bacon","Mayonnaise","Ham","Cheese","Eggs","Scale","Butter","Bacon","Sausage","Buffalo Wings","Steak","Butter"]
+    - ["Mayonnaise", "Buffalo Wings", "Steak", "Sausage", "Cheese", "Mayonnaise", "Ham", "Butter", "Bacon", "Steak", "Sausage", "Mayonnaise", "Ham", "Atkins", "Butter", "Eggs", "Cheese", "Bacon", "Sausage", "Buffalo Wings", "Scale", "Mayonnaise", "Butter", "Cheese", "Bacon", "Eggs", "Buffalo Wings", "Mayonnaise", "Steak", "Ham", "Cheese", "Bacon"]
+    - ["Ham", "Butter", "Eggs", "Scale", "Cheese", "Mayonnaise", "Butter", "Ham", "Sausage", "Bacon", "Steak", "Buffalo Wings", "Butter", "Mayonnaise", "Cheese", "Sausage", "Eggs", "Bacon", "Mayonnaise", "Buffalo Wings", "Ham", "Sausage", "Bacon", "Cheese", "Eggs", "Atkins", "Buffalo Wings", "Bacon", "Butter", "Cheese", "Mayonnaise", "Steak"]
+    - ["Ham", "Cheese", "Atkins", "Scale", "Butter", "Bacon", "Cheese", "Sausage", "Steak", "Eggs", "Bacon", "Mayonnaise", "Sausage", "Cheese", "Butter", "Ham", "Mayonnaise", "Bacon", "Buffalo Wings", "Sausage", "Cheese", "Eggs", "Butter", "Buffalo Wings", "Bacon", "Mayonnaise", "Eggs", "Ham", "Sausage", "Steak", "Mayonnaise", "Bacon"]
+    - ["Bacon", "Scale", "Steak", "Ham", "Cheese", "Sausage", "Butter", "Bacon", "Buffalo Wings", "Cheese", "Sausage", "Ham", "Butter", "Steak", "Mayonnaise", "Eggs", "Sausage", "Ham", "Atkins", "Butter", "Buffalo Wings", "Mayonnaise", "Eggs", "Ham", "Bacon", "Butter", "Steak", "Mayonnaise", "Sausage", "Eggs", "Cheese", "Buffalo Wings"]
+
