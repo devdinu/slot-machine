@@ -39,6 +39,7 @@ func (s Service) SpinOnce(ctx context.Context, bet int64) (Spin, error) {
 
 func (s Service) Play(ctx context.Context, user User) (Result, error) {
 	var result Result
+	user.Chips = user.Chips
 	//TODO: implement multiple spins, and pass bet to scorer and multiply
 	spin, err := s.SpinOnce(ctx, user.Bet)
 	if err != nil {
@@ -46,7 +47,8 @@ func (s Service) Play(ctx context.Context, user User) (Result, error) {
 	}
 	result.Spins = append(result.Spins, spin)
 	result.TotalWin += spin.Won
-	result.User.Chips -= user.Bet
+	//END
+	result.User.Chips -= user.Bet + result.TotalWin
 	return result, nil
 }
 

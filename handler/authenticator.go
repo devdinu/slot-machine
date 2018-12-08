@@ -5,19 +5,16 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/devdinu/slot_machine/config"
+	model "github.com/devdinu/slot_machine/models"
 	jwt "github.com/dgrijalva/jwt-go"
 )
 
-type CtxKey string
-
-var UserBetKey = CtxKey("bet")
-var UserIDKey = CtxKey("uid")
-var UserChipsKey = CtxKey("chips")
-
 func Authenticator(next http.Handler) http.Handler {
 	f := func(w http.ResponseWriter, r *http.Request) {
+		//TODO: parse header with Bearer
 		authToken := r.Header.Get("Authorization")
 		claims, err := authenticate(authToken)
 		if err != nil {
@@ -32,9 +29,9 @@ func Authenticator(next http.Handler) http.Handler {
 }
 
 func addContextInfo(parent context.Context, claims *UserClaim) context.Context {
-	ctx := context.WithValue(parent, UserBetKey, claims.Bet)
-	ctx = context.WithValue(ctx, UserIDKey, claims.UID)
-	ctx = context.WithValue(ctx, UserChipsKey, claims.Chips)
+	ctx := context.WithValue(parent, model.UserBetKey, claims.Bet)
+	ctx = context.WithValue(ctx, model.UserIDKey, claims.UID)
+	ctx = context.WithValue(ctx, model.UserChipsKey, claims.Chips)
 	return ctx
 }
 
@@ -62,4 +59,17 @@ func authenticate(authToken string) (*UserClaim, error) {
 		return nil, errors.New("Token Invalid")
 	}
 	return claims, nil
+}
+
+type Refresher struct {
+	http.ResponseWriter
+}
+
+func (r *Refresher) Refresh(bet, chips int64, uid string) *jwt.Token {
+	claims := &UserClaim{}
+	claims.Bet = bet
+	claims.Chips = chips
+	claims.UID = uid
+	claims.ExpiresAt = time.Now().Add(config.AuthTokenExpiryMinutes()).Unix()
+	return jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 }

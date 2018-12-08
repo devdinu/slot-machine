@@ -25,3 +25,14 @@ func TestAuthenticate(t *testing.T) {
 	}
 
 }
+
+func TestRefreshToken(t *testing.T) {
+	refresher := Refresher{}
+
+	token := refresher.Refresh(int64(500), int64(10000), "unique-identifier")
+	ts, err := token.SigningString()
+
+	require.NoError(t, err)
+	require.NotEmpty(t, ts)
+	require.NotEmpty(t, token)
+}

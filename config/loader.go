@@ -31,10 +31,6 @@ type Game struct {
 	ReelsOfSymbols []machine.Symbols `yaml:"reels"`
 	Rows           int
 }
-type Authentication struct {
-	Enabled bool
-	Secret  string
-}
 
 func Load(file string) error {
 	reader, err := os.Open(file)

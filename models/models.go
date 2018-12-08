@@ -20,3 +20,9 @@ type Location struct {
 }
 
 type Position int
+
+type CtxKey string
+
+var UserBetKey = CtxKey("bet")
+var UserIDKey = CtxKey("uid")
+var UserChipsKey = CtxKey("chips")
