@@ -47,8 +47,10 @@ func (s Service) Play(ctx context.Context, user User) (Result, error) {
 	}
 	result.Spins = append(result.Spins, spin)
 	result.TotalWin += spin.Won
-	//END
-	result.User.Chips -= user.Bet + result.TotalWin
+
+	//end of spins
+	remainingChips := user.Chips + result.TotalWin - user.Bet
+	result.User = User{Chips: remainingChips, Bet: user.Bet, UID: user.UID}
 	return result, nil
 }
 
