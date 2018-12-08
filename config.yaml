@@ -29,3 +29,4 @@ server:
 authentication:
   enabled: true
   secret: ThisIsTopSecret
+  expiry_minutes: 30

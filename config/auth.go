@@ -5,7 +5,7 @@ import "time"
 type Authentication struct {
 	Enabled       bool
 	Secret        string
-	ExpiryMinutes int
+	ExpiryMinutes int `yaml:"expiry_minutes"`
 }
 
 func AuthEnabled() bool {

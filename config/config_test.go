@@ -2,6 +2,7 @@ package config
 
 import (
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -14,6 +15,7 @@ func TestConfigLoad(t *testing.T) {
 
 	assert.Equal(t, []byte("ThisIsTopSecret"), AuthSecret())
 	assert.True(t, AuthEnabled())
+	assert.Equal(t, time.Duration(30)*time.Minute, AuthTokenExpiryMinutes())
 
 	gameCfg := Gaming()
 	assert.Equal(t, 5, len(gameCfg.ReelsOfSymbols))
