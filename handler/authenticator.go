@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"net/http"
@@ -9,16 +10,32 @@ import (
 	jwt "github.com/dgrijalva/jwt-go"
 )
 
+type CtxKey string
+
+var UserBetKey = CtxKey("bet")
+var UserIDKey = CtxKey("uid")
+var UserChipsKey = CtxKey("chips")
+
 func Authenticator(next http.Handler) http.Handler {
 	f := func(w http.ResponseWriter, r *http.Request) {
-		_, err := authenticate(w.Header().Get("Authorization"))
+		authToken := r.Header.Get("Authorization")
+		claims, err := authenticate(authToken)
 		if err != nil {
+			fmt.Println("Unauthorized request", err)
 			w.WriteHeader(http.StatusUnauthorized)
 			return
 		}
-		next.ServeHTTP(w, r)
+		ctx := addContextInfo(r.Context(), claims)
+		next.ServeHTTP(w, r.WithContext(ctx))
 	}
 	return http.HandlerFunc(f)
+}
+
+func addContextInfo(parent context.Context, claims *UserClaim) context.Context {
+	ctx := context.WithValue(parent, UserBetKey, claims.Bet)
+	ctx = context.WithValue(ctx, UserIDKey, claims.UID)
+	ctx = context.WithValue(ctx, UserChipsKey, claims.Chips)
+	return ctx
 }
 
 type UserClaim struct {

@@ -3,7 +3,7 @@ package game
 import (
 	"context"
 	"encoding/json"
-	"fmt"
+	"errors"
 	"net/http"
 
 	"github.com/devdinu/slot_machine/handler"
@@ -40,21 +40,23 @@ type gameServer struct {
 	service
 }
 
-func getUserInfo(ctx context.Context) User {
+func getUserInfo(ctx context.Context) (User, error) {
 	bet, ok1 := ctx.Value(handler.UserBetKey).(int64)
 	chips, ok2 := ctx.Value(handler.UserChipsKey).(int64)
 	uid, ok3 := ctx.Value(handler.UserIDKey).(string)
-	fmt.Println(ok1, ok2, ok3)
 	if !ok1 || !ok2 || !ok3 {
-		return User{}
+		return User{}, errors.New("Invalid Request")
 	}
-	return User{Bet: bet, Chips: chips, UID: uid}
+	return User{Bet: bet, Chips: chips, UID: uid}, nil
 }
 
 func (gs gameServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	user := getUserInfo(r.Context())
-	fmt.Println("proccessing request for", user)
+	user, err := getUserInfo(r.Context())
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
 
 	res, err := gs.service.Play(r.Context(), user)
 	if err != nil {
