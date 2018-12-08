@@ -28,4 +28,4 @@ server:
 
 authentication:
   enabled: true
-  secret: "ThisIsTopSecret"
+  secret: ThisIsTopSecret

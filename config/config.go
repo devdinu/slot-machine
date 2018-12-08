@@ -4,7 +4,10 @@ import (
 	"fmt"
 )
 
-func AuthSecret() string { return appConfig.Authentication.Secret }
+func AuthSecret() []byte {
+	//TODO: could encode this
+	return []byte(appConfig.Authentication.Secret)
+}
 
 func AuthEnabled() bool { return appConfig.Authentication.Enabled }
 

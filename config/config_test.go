@@ -12,7 +12,7 @@ func TestConfigLoad(t *testing.T) {
 	err := Load(filename)
 	require.NoError(t, err)
 
-	assert.Equal(t, "ThisIsTopSecret", AuthSecret())
+	assert.Equal(t, []byte("ThisIsTopSecret"), AuthSecret())
 	assert.True(t, AuthEnabled())
 
 	gameCfg := Gaming()
