@@ -23,4 +23,9 @@ game:
     - ["Ham", "Butter", "Eggs", "Scale", "Cheese", "Mayonnaise", "Butter", "Ham", "Sausage", "Bacon", "Steak", "Buffalo Wings", "Butter", "Mayonnaise", "Cheese", "Sausage", "Eggs", "Bacon", "Mayonnaise", "Buffalo Wings", "Ham", "Sausage", "Bacon", "Cheese", "Eggs", "Atkins", "Buffalo Wings", "Bacon", "Butter", "Cheese", "Mayonnaise", "Steak"]
     - ["Ham", "Cheese", "Atkins", "Scale", "Butter", "Bacon", "Cheese", "Sausage", "Steak", "Eggs", "Bacon", "Mayonnaise", "Sausage", "Cheese", "Butter", "Ham", "Mayonnaise", "Bacon", "Buffalo Wings", "Sausage", "Cheese", "Eggs", "Butter", "Buffalo Wings", "Bacon", "Mayonnaise", "Eggs", "Ham", "Sausage", "Steak", "Mayonnaise", "Bacon"]
     - ["Bacon", "Scale", "Steak", "Ham", "Cheese", "Sausage", "Butter", "Bacon", "Buffalo Wings", "Cheese", "Sausage", "Ham", "Butter", "Steak", "Mayonnaise", "Eggs", "Sausage", "Ham", "Atkins", "Butter", "Buffalo Wings", "Mayonnaise", "Eggs", "Ham", "Bacon", "Butter", "Steak", "Mayonnaise", "Sausage", "Eggs", "Cheese", "Buffalo Wings"]
+server:
+  port: 8881
 
+authentication:
+  enabled: true
+  secret: "ThisIsTopSecret"
