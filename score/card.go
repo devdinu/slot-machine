@@ -4,6 +4,8 @@ import model "github.com/devdinu/slot_machine/models"
 
 type symbolScore []int
 
+// holds score for symbol and occurence
+// symbol: [0, 10, 20, 30], occurence for 1,2,3,4 in order
 type scoreCard struct {
 	symbolScores map[model.Symbol]symbolScore
 }

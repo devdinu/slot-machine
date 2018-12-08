@@ -9,6 +9,34 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+func TestShouldComputeScoreWithWildSymbol(t *testing.T) {
+	scorecard := scoreCard{
+		symbolScores: map[model.Symbol]symbolScore{
+			"sym1":    []int{0, 10, 20, 50},
+			"scatter": []int{0, 100, 200, 300},
+		},
+	}
+	scorer := Scorer{
+		paylines: []model.Line{
+			{{Row: 0, Col: 0}, {Row: 0, Col: 1}, {Row: 0, Col: 2}, {Row: 0, Col: 3}}, // sym1:4 = 50
+		},
+		card:    scorecard,
+		scatter: "scatter",
+	}
+	board := []model.Symbols{
+		{"sym1", "sym1", "sym2", "scatter"},
+		{"sym2", "sym1", "scatter", "sym13"},
+		{"sym3", "scatter", "sym3", "sym1"},
+		{"sym3", "sym3", "sym3", "sym1"},
+	}
+	expectedScore := int64(10 + 200)
+
+	boardScore, err := scorer.Compute(context.Background(), board)
+
+	require.NoError(t, err)
+	assert.Equal(t, Score{expectedScore}, boardScore, "Should add scatter score too")
+}
+
 func TestShouldComputeScoreForMultiplePayLines(t *testing.T) {
 	scorecard := scoreCard{
 		symbolScores: map[model.Symbol]symbolScore{
@@ -29,6 +57,7 @@ func TestShouldComputeScoreForMultiplePayLines(t *testing.T) {
 	board := []model.Symbols{
 		{"sym1", "sym2", "sym2", "sym3"},
 		{"sym2", "sym1", "sym1", "sym13"},
+		{"sym3", "sym3", "sym3", "sym1"},
 		{"sym3", "sym3", "sym3", "sym1"},
 	}
 	expectedScore := int64(50 + 3 + 400)

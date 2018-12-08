@@ -30,6 +30,8 @@ type Location struct {
 type Game struct {
 	ReelsOfSymbols []machine.Symbols `yaml:"reels"`
 	Rows           int
+	Scatter        []machine.Symbol `yaml:"scatter"`
+	Wild           []machine.Symbol `yaml:"wild"`
 }
 
 func Load(file string) error {
