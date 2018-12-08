@@ -35,7 +35,7 @@ func TestShouldComputeScoreForMultiplePayLines(t *testing.T) {
 	boardScore, err := scorer.Compute(context.Background(), board)
 
 	require.NoError(t, err)
-	assert.Equal(t, Score{won: expectedScore}, boardScore)
+	assert.Equal(t, Score{expectedScore}, boardScore)
 }
 
 func TestShouldComputeScoreForASymbolGivenAPayLine(t *testing.T) {
@@ -60,7 +60,7 @@ func TestShouldComputeScoreForASymbolGivenAPayLine(t *testing.T) {
 	boardScore, err := scorer.Compute(context.Background(), board)
 
 	require.NoError(t, err)
-	assert.Equal(t, Score{won: 10}, boardScore)
+	assert.Equal(t, Score{10}, boardScore)
 }
 
 func TestShouldComputeOccurencesUntilSameSymbol(t *testing.T) {

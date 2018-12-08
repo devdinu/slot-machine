@@ -25,7 +25,11 @@ type location struct {
 }
 
 type Score struct {
-	won int64
+	Won int64
+}
+
+func (s *Score) Points() int64 {
+	return s.Won
 }
 
 func (b Board) get(l location) Symbol {
@@ -44,8 +48,8 @@ func (s Scorer) Compute(ctx context.Context, board Board) (Score, error) {
 			fmt.Println("received an error: ", err)
 			return Score{}, err
 		}
-		score.won += s.card.score(occ.sym, occ.count)
-		fmt.Println("score by occ -----", score.won, occ.sym, occ.count, &score)
+		score.Won += s.card.score(occ.sym, occ.count)
+		fmt.Println("score by occ -----", score.Won, occ.sym, occ.count, &score)
 	}
 	return score, nil
 }

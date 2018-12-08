@@ -18,13 +18,13 @@ func TestShouldReturnStoppedSymbolInReel(t *testing.T) {
 	)
 	stopPosition := Position(1)
 	stopper.On("Stop").Return(stopPosition)
-	expectedStop := Stop{chosen: []Symbol{"butter"}, position: stopPosition}
+	expectedStop := Stop{[]Symbol{"butter"}, stopPosition}
 
 	stops, err := machine.Spin()
 
 	require.NoError(t, err)
 	require.Equal(t, 1, len(stops))
-	require.Equal(t, 1, len(stops[0].chosen))
+	require.Equal(t, 1, len(stops[0].Symbols))
 	assert.Equal(t, expectedStop, stops[0])
 	stopper.AssertExpectations(t)
 }
@@ -39,8 +39,8 @@ func TestShouldReturnStoppedSymbolsForReels(t *testing.T) {
 	)
 	stopper.On("Stop").Return(Position(0)).Once()
 	stopper.On("Stop").Return(Position(2)).Once()
-	expectedStop1 := Stop{chosen: []Symbol{"cheese", "butter"}, position: 0}
-	expectedStop2 := Stop{chosen: []Symbol{"eggs", "something"}, position: 2}
+	expectedStop1 := Stop{[]Symbol{"cheese", "butter"}, 0}
+	expectedStop2 := Stop{[]Symbol{"eggs", "something"}, 2}
 
 	stops, err := machine.Spin()
 

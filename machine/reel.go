@@ -1,23 +1,16 @@
 package machine
 
-type Symbol string
-
 type Reel struct {
 	symbols []Symbol
 	stopper Stopper
 	choices int
 }
 
-type Stop struct {
-	chosen   []Symbol
-	position Position
-}
-
 func (r Reel) Spin() Stop {
 	pos := r.stopper.Stop()
 	return Stop{
-		chosen:   r.getSymbols(pos, r.choices),
-		position: pos,
+		r.getSymbols(pos, r.choices),
+		pos,
 	}
 }
 

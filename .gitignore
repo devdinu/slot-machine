@@ -2,3 +2,5 @@
 *.wiki
 logs
 *.log
+cmd/server/server
+cmd/game/game
