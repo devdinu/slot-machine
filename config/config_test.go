@@ -4,6 +4,7 @@ import (
 	"testing"
 	"time"
 
+	model "github.com/devdinu/slot_machine/models"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -20,6 +21,8 @@ func TestConfigLoad(t *testing.T) {
 	gameCfg := Gaming()
 	assert.Equal(t, 5, len(gameCfg.ReelsOfSymbols))
 	assert.Equal(t, 3, gameCfg.Rows)
+	assert.Equal(t, "Atkins", gameCfg.Wild.String())
+	assert.Equal(t, model.Symbol("Scale"), gameCfg.Scatter)
 
 	score := Scoring()
 	assert.Equal(t, 3, len(score.Paylines))

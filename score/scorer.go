@@ -12,6 +12,7 @@ type Scorer struct {
 	paylines []model.Line
 	card     scoreCard
 	scatter  model.Symbol
+	wild     model.Symbol
 }
 
 type occurence struct {
@@ -61,7 +62,8 @@ func (s Scorer) findOccurrences(line model.Line, board model.Board) (occurence, 
 	first := board.Get(line[0])
 	count := 0
 	for _, loc := range line {
-		if board.Get(loc) == first {
+		currSym := board.Get(loc)
+		if currSym == first || currSym == s.wild {
 			count++
 		} else {
 			break
@@ -70,8 +72,9 @@ func (s Scorer) findOccurrences(line model.Line, board model.Board) (occurence, 
 	return occurence{first, count}, nil
 }
 
-func NewScorer(scatter model.Symbol) Scorer {
+func NewScorer(scatter, wild model.Symbol) Scorer {
 	return Scorer{
 		scatter: scatter,
+		wild:    wild,
 	}
 }

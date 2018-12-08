@@ -4,6 +4,10 @@ type Symbol string
 type Symbols []Symbol
 type Board []Symbols
 
+func (s Symbol) String() string {
+	return string(s)
+}
+
 func (b Board) Get(l Location) Symbol {
 	return b[l.Row][l.Col]
 }

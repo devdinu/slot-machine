@@ -4,6 +4,7 @@ import (
 	"os"
 
 	"github.com/devdinu/slot_machine/machine"
+	model "github.com/devdinu/slot_machine/models"
 	"gopkg.in/yaml.v2"
 )
 
@@ -30,8 +31,8 @@ type Location struct {
 type Game struct {
 	ReelsOfSymbols []machine.Symbols `yaml:"reels"`
 	Rows           int
-	Scatter        []machine.Symbol `yaml:"scatter"`
-	Wild           []machine.Symbol `yaml:"wild"`
+	Scatter        model.Symbol `yaml:"scatter"`
+	Wild           model.Symbol `yaml:"wild"`
 }
 
 func Load(file string) error {

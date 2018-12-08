@@ -37,6 +37,41 @@ func TestShouldComputeScoreWithWildSymbol(t *testing.T) {
 	assert.Equal(t, Score{expectedScore}, boardScore, "Should add scatter score too")
 }
 
+func TestShouldConsiderWildcardSymbol(t *testing.T) {
+	scorecard := scoreCard{
+		symbolScores: map[model.Symbol]symbolScore{
+			"sym1": []int{0, 10, 30, 50},
+			"sym2": []int{0, 20, 20, 50},
+			"wild": []int{0, 100, 200, 300},
+			"sym3": []int{0, 100, 200, 300},
+			"sym4": []int{0, 100, 200, 400},
+		},
+	}
+	scorer := Scorer{
+		paylines: []model.Line{
+			{{Row: 0, Col: 0}, {Row: 0, Col: 1}, {Row: 0, Col: 2}, {Row: 0, Col: 3}}, // row1
+			{{Row: 1, Col: 0}, {Row: 1, Col: 1}, {Row: 1, Col: 2}, {Row: 1, Col: 3}}, // row2
+			{{Row: 2, Col: 0}, {Row: 2, Col: 1}, {Row: 2, Col: 2}, {Row: 2, Col: 3}}, // row3
+			{{Row: 3, Col: 0}, {Row: 3, Col: 1}, {Row: 3, Col: 2}, {Row: 3, Col: 3}}, // row4
+		},
+		card: scorecard,
+		wild: "wild",
+	}
+	board := []model.Symbols{
+		{"sym1", "sym1", "wild", "symx"}, // thrice: 30
+		{"sym2", "wild", "bla", "sym13"}, // twice: 20
+		{"sym3", "wild", "sym3", "sym1"}, // thrice: 200
+		{"sym4", "wild", "wild", "sym4"}, // four: 400
+	}
+	expectedScore := int64(30 + 20 + 200 + 400)
+
+	boardScore, err := scorer.Compute(context.Background(), board)
+
+	require.NoError(t, err)
+	assert.Equal(t, Score{expectedScore}, boardScore, "Should consider wildcard symbol too")
+
+}
+
 func TestShouldComputeScoreForMultiplePayLines(t *testing.T) {
 	scorecard := scoreCard{
 		symbolScores: map[model.Symbol]symbolScore{

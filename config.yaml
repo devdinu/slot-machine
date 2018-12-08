@@ -15,8 +15,6 @@ score:
     - [{row: 0, col: 0}, {row: 1, col: 1}, {row: 1, col: 2}, {row: 2, col: 3}]
     - [{row: 1, col: 0}, {row: 0, col: 1}, {row: 0, col: 2}, {row: 1, col: 3}]
     - [{row: 2, col: 0}, {row: 2, col: 1}, {row: 2, col: 2}, {row: 0, col: 3}]
-  wild: Atkins
-  scatter: ["Scale"]
 game:
   rows: 3
   reels:
@@ -25,6 +23,8 @@ game:
     - ["Ham", "Butter", "Eggs", "Scale", "Cheese", "Mayonnaise", "Butter", "Ham", "Sausage", "Bacon", "Steak", "Buffalo Wings", "Butter", "Mayonnaise", "Cheese", "Sausage", "Eggs", "Bacon", "Mayonnaise", "Buffalo Wings", "Ham", "Sausage", "Bacon", "Cheese", "Eggs", "Atkins", "Buffalo Wings", "Bacon", "Butter", "Cheese", "Mayonnaise", "Steak"]
     - ["Ham", "Cheese", "Atkins", "Scale", "Butter", "Bacon", "Cheese", "Sausage", "Steak", "Eggs", "Bacon", "Mayonnaise", "Sausage", "Cheese", "Butter", "Ham", "Mayonnaise", "Bacon", "Buffalo Wings", "Sausage", "Cheese", "Eggs", "Butter", "Buffalo Wings", "Bacon", "Mayonnaise", "Eggs", "Ham", "Sausage", "Steak", "Mayonnaise", "Bacon"]
     - ["Bacon", "Scale", "Steak", "Ham", "Cheese", "Sausage", "Butter", "Bacon", "Buffalo Wings", "Cheese", "Sausage", "Ham", "Butter", "Steak", "Mayonnaise", "Eggs", "Sausage", "Ham", "Atkins", "Butter", "Buffalo Wings", "Mayonnaise", "Eggs", "Ham", "Bacon", "Butter", "Steak", "Mayonnaise", "Sausage", "Eggs", "Cheese", "Buffalo Wings"]
+  wild: Atkins
+  scatter: Scale
 server:
   port: 8080
 
