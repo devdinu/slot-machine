@@ -3,7 +3,10 @@ package game
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
+
+	"github.com/devdinu/slot_machine/handler"
 )
 
 type SpinRequest struct {
@@ -37,9 +40,21 @@ type gameServer struct {
 	service
 }
 
+func getUserInfo(ctx context.Context) User {
+	bet, ok1 := ctx.Value(handler.UserBetKey).(int64)
+	chips, ok2 := ctx.Value(handler.UserChipsKey).(int64)
+	uid, ok3 := ctx.Value(handler.UserIDKey).(string)
+	fmt.Println(ok1, ok2, ok3)
+	if !ok1 || !ok2 || !ok3 {
+		return User{}
+	}
+	return User{Bet: bet, Chips: chips, UID: uid}
+}
+
 func (gs gameServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	var user User
+	user := getUserInfo(r.Context())
+	fmt.Println("proccessing request for", user)
 
 	res, err := gs.service.Play(r.Context(), user)
 	if err != nil {
@@ -54,6 +69,6 @@ func (gs gameServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func NewServer() http.Handler {
-	return gameServer{}
+func NewServer(svc service) http.Handler {
+	return gameServer{svc}
 }

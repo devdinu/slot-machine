@@ -3,12 +3,12 @@ package config
 import (
 	"os"
 
+	"github.com/devdinu/slot_machine/machine"
 	"gopkg.in/yaml.v2"
 )
 
 var appConfig Application
 
-type Reel []string
 type Line []Location
 type Server struct{ Port int }
 
@@ -28,8 +28,8 @@ type Location struct {
 	Col int
 }
 type Game struct {
-	Reels []Reel
-	Rows  int
+	ReelsOfSymbols []machine.Symbols `yaml:"reels"`
+	Rows           int
 }
 type Authentication struct {
 	Enabled bool

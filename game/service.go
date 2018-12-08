@@ -4,10 +4,12 @@ import (
 	"context"
 
 	"github.com/devdinu/slot_machine/machine"
+	model "github.com/devdinu/slot_machine/models"
 	"github.com/devdinu/slot_machine/score"
 )
 
 type Board []machine.Symbols
+
 type Service struct {
 	Machine
 	Scorer
@@ -18,7 +20,7 @@ type Machine interface {
 }
 
 type Scorer interface {
-	Compute(ctx context.Context, board Board) (score.Score, error)
+	Compute(ctx context.Context, board model.Board) (score.Score, error)
 }
 
 func (s Service) SpinOnce(ctx context.Context, bet int64) (Spin, error) {

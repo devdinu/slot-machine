@@ -4,13 +4,14 @@ import (
 	"context"
 	"testing"
 
+	model "github.com/devdinu/slot_machine/models"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
 
 func TestShouldComputeScoreForMultiplePayLines(t *testing.T) {
 	scorecard := scoreCard{
-		symbolScores: map[Symbol]symbolScore{
+		symbolScores: map[model.Symbol]symbolScore{
 			"sym1":    []int{0, 0, 20, 50},
 			"sym2":    []int{1, 2, 3, 4},
 			"sym3":    []int{100, 200, 300, 400},
@@ -18,17 +19,17 @@ func TestShouldComputeScoreForMultiplePayLines(t *testing.T) {
 		},
 	}
 	scorer := Scorer{
-		paylines: []Line{
-			{{0, 0}, {1, 1}, {1, 2}, {2, 3}}, // sym1:4 = 50
-			{{1, 0}, {0, 1}, {0, 2}, {1, 3}}, // sym2:3 = 3
-			{{2, 0}, {2, 1}, {2, 2}, {0, 3}}, // sym3:4: 400
+		paylines: []model.Line{
+			{{Row: 0, Col: 0}, {Row: 1, Col: 1}, {Row: 1, Col: 2}, {Row: 2, Col: 3}}, // sym1:4 = 50
+			{{Row: 1, Col: 0}, {Row: 0, Col: 1}, {Row: 0, Col: 2}, {Row: 1, Col: 3}}, // sym2:3 = 3
+			{{Row: 2, Col: 0}, {Row: 2, Col: 1}, {Row: 2, Col: 2}, {Row: 0, Col: 3}}, // sym3:4: 400
 		},
 		card: scorecard,
 	}
-	board := []Symbols{
-		Symbols{"sym1", "sym2", "sym2", "sym3"},
-		Symbols{"sym2", "sym1", "sym1", "sym13"},
-		Symbols{"sym3", "sym3", "sym3", "sym1"},
+	board := []model.Symbols{
+		{"sym1", "sym2", "sym2", "sym3"},
+		{"sym2", "sym1", "sym1", "sym13"},
+		{"sym3", "sym3", "sym3", "sym1"},
 	}
 	expectedScore := int64(50 + 3 + 400)
 
@@ -40,21 +41,21 @@ func TestShouldComputeScoreForMultiplePayLines(t *testing.T) {
 
 func TestShouldComputeScoreForASymbolGivenAPayLine(t *testing.T) {
 	scorecard := scoreCard{
-		symbolScores: map[Symbol]symbolScore{
+		symbolScores: map[model.Symbol]symbolScore{
 			"sym2": []int{1, 2, 3, 4},
 			"sym1": []int{0, 10, 20, 50},
 		},
 	}
 	scorer := Scorer{
-		paylines: []Line{[]location{
-			{0, 0}, {1, 1}, {2, 0}, {1, 1},
+		paylines: []model.Line{[]model.Location{
+			{Row: 0, Col: 0}, {Row: 1, Col: 1}, {Row: 2, Col: 0}, {Row: 1, Col: 1},
 		}},
 		card: scorecard,
 	}
-	board := []Symbols{
-		Symbols{"sym1", "sym01", "sym1", "sym03"},
-		Symbols{"sym1", "sym1", "sym12", "sym13"},
-		Symbols{"sym20", "sym21", "sym22", "sym1"},
+	board := []model.Symbols{
+		{"sym1", "sym01", "sym1", "sym03"},
+		{"sym1", "sym1", "sym12", "sym13"},
+		{"sym20", "sym21", "sym22", "sym1"},
 	}
 
 	boardScore, err := scorer.Compute(context.Background(), board)
@@ -65,26 +66,26 @@ func TestShouldComputeScoreForASymbolGivenAPayLine(t *testing.T) {
 
 func TestShouldComputeOccurencesUntilSameSymbol(t *testing.T) {
 	scorer := Scorer{}
-	l := Line{{0, 0}, {0, 1}, {0, 2}, {0, 3}}
+	l := model.Line{{Row: 0, Col: 0}, {Row: 0, Col: 1}, {Row: 0, Col: 2}, {Row: 0, Col: 3}}
 	testCases := []struct {
-		Board
-		expectedSym   Symbol
+		model.Board
+		expectedSym   model.Symbol
 		expectedCount int
 	}{
 		{
-			Board{{"1", "1", "1", "2"}},
+			model.Board{{"1", "1", "1", "2"}},
 			"1", 3,
 		},
 		{
-			Board{{"1", "2", "1", "2"}},
+			model.Board{{"1", "2", "1", "2"}},
 			"1", 1,
 		},
 		{
-			Board{{"0", "1", "1", "2"}},
+			model.Board{{"0", "1", "1", "2"}},
 			"0", 1,
 		},
 		{
-			Board{{"sym", "sym", "sym", "sym"}},
+			model.Board{{"sym", "sym", "sym", "sym"}},
 			"sym", 4,
 		},
 	}

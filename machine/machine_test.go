@@ -10,12 +10,12 @@ import (
 
 func TestShouldReturnStoppedSymbolInReel(t *testing.T) {
 	stopper := new(stopperMock)
-	machine := NewMachine(
-		stopper,
-		[]Symbol{"cheese", "butter", "eggs"},
-		1,
-		1,
-	)
+	machineCfg := Config{
+		[]Symbols{
+			{"cheese", "butter", "eggs"},
+		}, 1,
+	}
+	machine := NewMachine(stopper, machineCfg)
 	stopPosition := Position(1)
 	stopper.On("Stop").Return(stopPosition)
 	expectedStop := Stop{[]Symbol{"butter"}, stopPosition}
@@ -31,12 +31,14 @@ func TestShouldReturnStoppedSymbolInReel(t *testing.T) {
 
 func TestShouldReturnStoppedSymbolsForReels(t *testing.T) {
 	stopper := new(stopperMock)
-	machine := NewMachine(
-		stopper,
-		[]Symbol{"cheese", "butter", "eggs", "something", "else"},
+	machineCfg := Config{
+		[]Symbols{
+			{"cheese", "butter", "eggs", "something", "else"},
+			{"cheese", "butter", "eggs", "something", "else"},
+		},
 		2,
-		2,
-	)
+	}
+	machine := NewMachine(stopper, machineCfg)
 	stopper.On("Stop").Return(Position(0)).Once()
 	stopper.On("Stop").Return(Position(2)).Once()
 	expectedStop1 := Stop{[]Symbol{"cheese", "butter"}, 0}

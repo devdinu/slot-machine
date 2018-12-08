@@ -18,3 +18,8 @@ func Address() string {
 func Gaming() Game { return appConfig.Game }
 
 func Scoring() Score { return appConfig.Score }
+
+func StopperLimit() int {
+	//All reels should be of same len
+	return len(appConfig.Game.ReelsOfSymbols[0])
+}

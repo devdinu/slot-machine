@@ -11,8 +11,8 @@ type RandomStopper struct {
 	limit int
 }
 
-func (s RandomStopper) Stop() int {
-	return rand.Intn(s.limit)
+func (s RandomStopper) Stop() Position {
+	return Position(rand.Intn(s.limit))
 }
 
 func NewRandomStopper(limit int) (RandomStopper, error) {

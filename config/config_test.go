@@ -16,7 +16,7 @@ func TestConfigLoad(t *testing.T) {
 	assert.True(t, AuthEnabled())
 
 	gameCfg := Gaming()
-	assert.Equal(t, 5, len(gameCfg.Reels))
+	assert.Equal(t, 5, len(gameCfg.ReelsOfSymbols))
 	assert.Equal(t, 3, gameCfg.Rows)
 
 	score := Scoring()
