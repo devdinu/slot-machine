@@ -17,19 +17,20 @@ func TestShouldSpinAndComputeScore(t *testing.T) {
 	r1 := machine.Symbols{"sym1", "sym1", "symo"}
 	r2 := machine.Symbols{"symx", "symy", "sym"}
 	r3 := machine.Symbols{"sym1", "symbla", "symfoo"}
-	stops := []machine.Stop{{r1, 1}, {r2, 15}, {r3, 7}}
-	gameScore := score.Score{int64(12345)}
+	stops := []machine.Stop{{Symbols: r1, Position: 1}, {Symbols: r2, Position: 15}, {Symbols: r3, Position: 7}}
+	gameScore := score.Score{Won: int64(12345)}
 	mach.On("Spin").Return(stops, nil)
 	scorer.On("Compute", ctx, Board{r1, r2, r3}).Return(gameScore, nil)
 
 	service := NewService(mach, scorer)
 	stopPositions := []int{1, 15, 7}
+	bet := int64(2000)
 
-	res, err := service.Play(ctx)
+	spin, err := service.SpinOnce(ctx, bet)
 	require.NoError(t, err)
 
-	assert.Equal(t, gameScore.Won, res.Won)
-	assert.Equal(t, stopPositions, res.Stops)
+	assert.Equal(t, gameScore.Won*bet, spin.Won)
+	assert.Equal(t, stopPositions, spin.Stops)
 }
 
 type machineMock struct{ mock.Mock }

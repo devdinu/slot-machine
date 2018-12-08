@@ -2,6 +2,7 @@ package game
 
 import (
 	"context"
+	"encoding/json"
 	"net/http"
 )
 
@@ -9,38 +10,50 @@ type SpinRequest struct {
 	User
 }
 
-type SpinResponse struct {
-	Total int64  `json:"total"`
-	Spins []Spin `json:"spins"`
-	User
+type Result struct {
+	Spins    `json:"spins"`
+	TotalWin int64 `json:"total"`
+	User     `json:"user"`
 }
 
 type Spin struct {
 	Type  string `json:"type"`
-	Total string `json:"total"`
+	Won   int64  `json:"total"`
 	Stops []int  `json:"stops"`
 }
 
 type User struct {
 	UID   string
 	Chips int64
-	Bet   int
+	Bet   int64
 }
+type Spins []Spin
 
 type service interface {
-	Play(ctx context.Context) (Result, error)
+	Play(context.Context, User) (Result, error)
 }
 
-type GameServer struct {
+type gameServer struct {
 	service
 }
 
-func (gs GameServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (gs gameServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
+	var user User
 
-	//w.Write()
+	res, err := gs.service.Play(r.Context(), user)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	err = json.NewEncoder(w).Encode(&res)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
 }
 
 func NewServer() http.Handler {
-	return GameServer{}
+	return gameServer{}
 }
