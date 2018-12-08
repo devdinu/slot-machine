@@ -43,5 +43,5 @@ Slot Machine game which is configured with Atkins diet.
 
 ### Pending:
 - currently code handles single spin
-- scoring based on scatter symbols
-
+- mock stopper to test
+- optimize the scoring for paylines

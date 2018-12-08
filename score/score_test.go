@@ -10,19 +10,18 @@ import (
 )
 
 func TestShouldComputeScoreWithWildSymbol(t *testing.T) {
-	scorecard := scoreCard{
-		symbolScores: map[model.Symbol]symbolScore{
-			"sym1":    []int{0, 10, 20, 50},
-			"scatter": []int{0, 100, 200, 300},
-		},
+	scorecard := ScoreCard{
+		"sym1":    []int{0, 10, 20, 50},
+		"scatter": []int{0, 100, 200, 300},
 	}
-	scorer := Scorer{
-		paylines: []model.Line{
+	scorer := NewScorer(Config{
+		Paylines: []model.Line{
 			{{Row: 0, Col: 0}, {Row: 0, Col: 1}, {Row: 0, Col: 2}, {Row: 0, Col: 3}}, // sym1:4 = 50
 		},
-		card:    scorecard,
-		scatter: "scatter",
-	}
+		ScoreCard: scorecard,
+		Scatter:   "scatter",
+	})
+
 	board := []model.Symbols{
 		{"sym1", "sym1", "sym2", "scatter"},
 		{"sym2", "sym1", "scatter", "sym13"},
@@ -38,25 +37,24 @@ func TestShouldComputeScoreWithWildSymbol(t *testing.T) {
 }
 
 func TestShouldConsiderWildcardSymbol(t *testing.T) {
-	scorecard := scoreCard{
-		symbolScores: map[model.Symbol]symbolScore{
-			"sym1": []int{0, 10, 30, 50},
-			"sym2": []int{0, 20, 20, 50},
-			"wild": []int{0, 100, 200, 300},
-			"sym3": []int{0, 100, 200, 300},
-			"sym4": []int{0, 100, 200, 400},
-		},
+	scorecard := ScoreCard{
+		"sym1": []int{0, 10, 30, 50},
+		"sym2": []int{0, 20, 20, 50},
+		"wild": []int{0, 100, 200, 300},
+		"sym3": []int{0, 100, 200, 300},
+		"sym4": []int{0, 100, 200, 400},
 	}
-	scorer := Scorer{
-		paylines: []model.Line{
-			{{Row: 0, Col: 0}, {Row: 0, Col: 1}, {Row: 0, Col: 2}, {Row: 0, Col: 3}}, // row1
-			{{Row: 1, Col: 0}, {Row: 1, Col: 1}, {Row: 1, Col: 2}, {Row: 1, Col: 3}}, // row2
-			{{Row: 2, Col: 0}, {Row: 2, Col: 1}, {Row: 2, Col: 2}, {Row: 2, Col: 3}}, // row3
-			{{Row: 3, Col: 0}, {Row: 3, Col: 1}, {Row: 3, Col: 2}, {Row: 3, Col: 3}}, // row4
-		},
-		card: scorecard,
-		wild: "wild",
+	paylines := []model.Line{
+		{{Row: 0, Col: 0}, {Row: 0, Col: 1}, {Row: 0, Col: 2}, {Row: 0, Col: 3}}, // row1
+		{{Row: 1, Col: 0}, {Row: 1, Col: 1}, {Row: 1, Col: 2}, {Row: 1, Col: 3}}, // row2
+		{{Row: 2, Col: 0}, {Row: 2, Col: 1}, {Row: 2, Col: 2}, {Row: 2, Col: 3}}, // row3
+		{{Row: 3, Col: 0}, {Row: 3, Col: 1}, {Row: 3, Col: 2}, {Row: 3, Col: 3}}, // row4
 	}
+	scorer := NewScorer(Config{
+		Paylines:  paylines,
+		ScoreCard: scorecard,
+		Wild:      "wild",
+	})
 	board := []model.Symbols{
 		{"sym1", "sym1", "wild", "symx"}, // thrice: 30
 		{"sym2", "wild", "bla", "sym13"}, // twice: 20
@@ -73,13 +71,11 @@ func TestShouldConsiderWildcardSymbol(t *testing.T) {
 }
 
 func TestShouldComputeScoreForMultiplePayLines(t *testing.T) {
-	scorecard := scoreCard{
-		symbolScores: map[model.Symbol]symbolScore{
-			"sym1":    []int{0, 0, 20, 50},
-			"sym2":    []int{1, 2, 3, 4},
-			"sym3":    []int{100, 200, 300, 400},
-			"unknown": []int{100, 200, 300, 400},
-		},
+	scorecard := ScoreCard{
+		"sym1":    []int{0, 0, 20, 50},
+		"sym2":    []int{1, 2, 3, 4},
+		"sym3":    []int{100, 200, 300, 400},
+		"unknown": []int{100, 200, 300, 400},
 	}
 	scorer := Scorer{
 		paylines: []model.Line{
@@ -104,11 +100,9 @@ func TestShouldComputeScoreForMultiplePayLines(t *testing.T) {
 }
 
 func TestShouldComputeScoreForASymbolGivenAPayLine(t *testing.T) {
-	scorecard := scoreCard{
-		symbolScores: map[model.Symbol]symbolScore{
-			"sym2": []int{1, 2, 3, 4},
-			"sym1": []int{0, 10, 20, 50},
-		},
+	scorecard := ScoreCard{
+		"sym2": []int{1, 2, 3, 4},
+		"sym1": []int{0, 10, 20, 50},
 	}
 	scorer := Scorer{
 		paylines: []model.Line{[]model.Location{

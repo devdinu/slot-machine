@@ -46,7 +46,13 @@ func buildGameServer() (http.Handler, error) {
 	if err != nil {
 		return nil, err
 	}
-	scorer := score.NewScorer(gameCfg.Scatter, gameCfg.Wild)
+	scoreCfg := config.Scoring()
+	scorerConfig := score.Config{
+		Scatter: gameCfg.Scatter, Wild: gameCfg.Wild,
+		Paylines:  scoreCfg.Paylines,
+		ScoreCard: scoreCfg.SymbolsScore,
+	}
+	scorer := score.NewScorer(scorerConfig)
 	machineCfg := machine.Config{
 		ReelsOfSymbols: gameCfg.ReelsOfSymbols,
 		Rows:           gameCfg.Rows,

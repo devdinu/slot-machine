@@ -5,12 +5,12 @@ import (
 
 	"github.com/devdinu/slot_machine/machine"
 	model "github.com/devdinu/slot_machine/models"
+	"github.com/devdinu/slot_machine/score"
 	"gopkg.in/yaml.v2"
 )
 
 var appConfig Application
 
-type Line []Location
 type Server struct{ Port int }
 
 type Application struct {
@@ -21,13 +21,10 @@ type Application struct {
 	Authentication
 }
 type Score struct {
-	SymbolsScore map[string][]int `yaml:"symbol_score"`
-	Paylines     []Line           `yaml:"pay_lines,flow"`
+	SymbolsScore score.ScoreCard `yaml:"symbol_score"`
+	Paylines     []model.Line    `yaml:"pay_lines,flow"`
 }
-type Location struct {
-	Row int
-	Col int
-}
+
 type Game struct {
 	ReelsOfSymbols []machine.Symbols `yaml:"reels"`
 	Rows           int

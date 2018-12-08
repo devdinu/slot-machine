@@ -10,7 +10,7 @@ import (
 
 type Scorer struct {
 	paylines []model.Line
-	card     scoreCard
+	card     ScoreCard
 	scatter  model.Symbol
 	wild     model.Symbol
 }
@@ -72,9 +72,18 @@ func (s Scorer) findOccurrences(line model.Line, board model.Board) (occurence, 
 	return occurence{first, count}, nil
 }
 
-func NewScorer(scatter, wild model.Symbol) Scorer {
+type Config struct {
+	Wild     model.Symbol
+	Scatter  model.Symbol
+	Paylines []model.Line
+	ScoreCard
+}
+
+func NewScorer(cfg Config) Scorer {
 	return Scorer{
-		scatter: scatter,
-		wild:    wild,
+		scatter:  cfg.Scatter,
+		wild:     cfg.Wild,
+		paylines: cfg.Paylines,
+		card:     cfg.ScoreCard,
 	}
 }
