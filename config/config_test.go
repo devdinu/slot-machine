@@ -25,6 +25,6 @@ func TestConfigLoad(t *testing.T) {
 	assert.Equal(t, model.Symbol("Scale"), gameCfg.Scatter)
 
 	score := Scoring()
-	assert.Equal(t, 3, len(score.Paylines))
+	assert.Equal(t, 4, len(score.Paylines))
 	assert.Equal(t, 10, len(score.SymbolsScore))
 }

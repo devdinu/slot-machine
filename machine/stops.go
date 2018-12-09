@@ -21,9 +21,14 @@ func (stp Stops) GetStopPositions() []int {
 }
 
 func (stp Stops) GetBoard() model.Board {
-	board := make([]model.Symbols, len(stp))
-	for i, s := range stp {
-		board[i] = s.Symbols.ToModelSymbols()
+	if len(stp) <= 0 {
+		return nil
+	}
+	board := make([]model.Symbols, len(stp[0].Symbols))
+	for _, s := range stp {
+		for j, currSym := range s.Symbols.ToModelSymbols() {
+			board[j] = append(board[j], currSym)
+		}
 	}
 	return board
 }

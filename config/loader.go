@@ -19,10 +19,16 @@ type Application struct {
 	Game
 	Server
 	Authentication
+	Stopper
 }
 type Score struct {
 	SymbolsScore score.ScoreCard `yaml:"symbol_score"`
 	Paylines     []model.Line    `yaml:"pay_lines,flow"`
+}
+
+type Stopper struct {
+	ManualMode      bool  `yaml:"manual_mode"`
+	ManualPositions []int `yaml:"manual_positions"`
 }
 
 type Game struct {

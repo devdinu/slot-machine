@@ -42,9 +42,17 @@ func Ping(w http.ResponseWriter, r *http.Request) {
 
 func buildGameServer() (http.Handler, error) {
 	gameCfg := config.Gaming()
-	stopper, err := machine.NewRandomStopper(config.StopperLimit())
-	if err != nil {
-		return nil, err
+	stopCfg := config.PositionStopper()
+
+	var stopper machine.Stopper
+	if stopCfg.ManualMode {
+		stopper = machine.NewCodedStopper(stopCfg.ManualPositions)
+	} else {
+		var err error
+		stopper, err = machine.NewRandomStopper(config.StopperLimit())
+		if err != nil {
+			return nil, err
+		}
 	}
 	scoreCfg := config.Scoring()
 	scorerConfig := score.Config{

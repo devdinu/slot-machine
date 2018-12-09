@@ -13,6 +13,7 @@ score:
     Mayonnaise:   [0, 0, 10, 25, 50]
   pay_lines:
     - [{row: 0, col: 0}, {row: 1, col: 1}, {row: 1, col: 2}, {row: 2, col: 3}]
+    - [{row: 0, col: 0}, {row: 0, col: 1}, {row: 0, col: 2}, {row: 0, col: 3}]
     - [{row: 1, col: 0}, {row: 0, col: 1}, {row: 0, col: 2}, {row: 1, col: 3}]
     - [{row: 2, col: 0}, {row: 2, col: 1}, {row: 2, col: 2}, {row: 0, col: 3}]
 game:
@@ -32,3 +33,7 @@ authentication:
   enabled: true
   secret: ThisIsTopSecret
   expiry_minutes: 30
+
+stopper:
+  manual_mode: false
+  manual_positions: [24,13,16,1,1]

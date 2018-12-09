@@ -3,6 +3,7 @@ package score
 import (
 	"context"
 	"errors"
+	"fmt"
 	"sync"
 
 	model "github.com/devdinu/slot_machine/models"
@@ -14,7 +15,6 @@ type Scorer struct {
 	scatter  model.Symbol
 	wild     model.Symbol
 }
-
 type occurence struct {
 	sym   model.Symbol
 	count int
@@ -28,7 +28,15 @@ func (s *Score) Points() int64 {
 	return s.Won
 }
 
+func displayBoard(board model.Board) {
+	fmt.Println("Board: ")
+	for _, row := range board {
+		fmt.Println(row)
+	}
+}
+
 func (s Scorer) Compute(ctx context.Context, board model.Board) (Score, error) {
+	displayBoard(board)
 	var score Score
 	var wg sync.WaitGroup
 	wg.Add(len(s.paylines) + 1) //+1 for scatter score
@@ -60,7 +68,8 @@ func (s Scorer) lineScore(ctx context.Context, line model.Line, board model.Boar
 	if err != nil {
 		errChan <- err
 	}
-	scoreChan <- s.card.score(occ.sym, occ.count)
+	lscore := s.card.score(occ.sym, occ.count)
+	scoreChan <- lscore
 }
 
 func (s Scorer) scatterScore(ctx context.Context, board model.Board, wg *sync.WaitGroup, scoreChan chan<- int64, errChan chan error) {

@@ -16,3 +16,7 @@ func StopperLimit() int {
 	//All reels should be of same len
 	return len(appConfig.Game.ReelsOfSymbols[0])
 }
+
+func PositionStopper() Stopper {
+	return appConfig.Stopper
+}

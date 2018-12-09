@@ -41,9 +41,12 @@ Slot Machine game which is configured with Atkins diet.
 }
 ```
 
+### Testing
+- `make test` runs the unit tests
+- `manual_mode` is needed to enabled the coded stopper, to stop the reels at specified `manual_positions` in stopper config
+- set `manual_mode` to false to run in normal random stopper mode
+
 ### Pending:
 - currently code handles single spin
-- mock stopper to test
-- optimize the scoring for paylines
 - add logger with levels
 - integration tests

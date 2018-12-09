@@ -21,7 +21,12 @@ func TestShouldSpinAndComputeScore(t *testing.T) {
 	stops := []machine.Stop{{Symbols: r1, Position: 1}, {Symbols: r2, Position: 15}, {Symbols: r3, Position: 7}}
 	gameScore := score.Score{Won: int64(12345)}
 	mach.On("Spin").Return(stops, nil)
-	scorer.On("Compute", ctx, model.Board{r1.ToModelSymbols(), r2.ToModelSymbols(), r3.ToModelSymbols()}).Return(gameScore, nil)
+	board := model.Board{
+		model.Symbols{"sym1", "symx", "sym1"},
+		model.Symbols{"sym1", "symy", "symbla"},
+		model.Symbols{"symo", "sym", "symfoo"},
+	}
+	scorer.On("Compute", ctx, board).Return(gameScore, nil)
 
 	service := NewService(mach, scorer)
 	stopPositions := []int{1, 15, 7}
