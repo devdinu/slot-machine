@@ -3,7 +3,7 @@ package score
 import (
 	"context"
 	"errors"
-	"fmt"
+	"sync"
 
 	model "github.com/devdinu/slot_machine/models"
 )
@@ -30,20 +30,42 @@ func (s *Score) Points() int64 {
 
 func (s Scorer) Compute(ctx context.Context, board model.Board) (Score, error) {
 	var score Score
+	var wg sync.WaitGroup
+	wg.Add(len(s.paylines) + 1) //+1 for scatter score
+	scoreChan := make(chan int64, len(s.paylines)+1)
+	errChan := make(chan error, len(s.paylines))
+
 	for _, pl := range s.paylines {
-		occ, err := s.findOccurrences(pl, board)
-		if err != nil {
-			fmt.Println("received an error: ", err)
-			return Score{}, err
-		}
-		score.Won += s.card.score(occ.sym, occ.count)
-		fmt.Println("score by occ -----", score.Won, occ.sym, occ.count, &score)
+		go s.lineScore(ctx, pl, board, &wg, scoreChan, errChan)
 	}
-	score.Won += s.scatterScore(ctx, board)
+
+	//could use Socre with locks to avoid channels and have simplicity
+	go s.scatterScore(ctx, board, &wg, scoreChan, errChan)
+	wg.Wait()
+	close(scoreChan)
+	close(errChan)
+	if err, ok := <-errChan; ok && err != nil {
+		return Score{}, err
+	}
+	for cscore := range scoreChan {
+		score.Won += cscore
+	}
 	return score, nil
 }
 
-func (s Scorer) scatterScore(ctx context.Context, board model.Board) int64 {
+func (s Scorer) lineScore(ctx context.Context, line model.Line, board model.Board, wg *sync.WaitGroup, scoreChan chan<- int64, errChan chan error) {
+	defer wg.Done()
+
+	occ, err := s.findOccurrences(line, board)
+	if err != nil {
+		errChan <- err
+	}
+	scoreChan <- s.card.score(occ.sym, occ.count)
+}
+
+func (s Scorer) scatterScore(ctx context.Context, board model.Board, wg *sync.WaitGroup, scoreChan chan<- int64, errChan chan error) {
+	defer wg.Done()
+
 	scatterCount := 0
 	for _, row := range board {
 		for _, sym := range row {
@@ -52,7 +74,7 @@ func (s Scorer) scatterScore(ctx context.Context, board model.Board) int64 {
 			}
 		}
 	}
-	return s.card.score(s.scatter, scatterCount)
+	scoreChan <- s.card.score(s.scatter, scatterCount)
 }
 
 func (s Scorer) findOccurrences(line model.Line, board model.Board) (occurence, error) {
